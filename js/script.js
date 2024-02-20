@@ -2,13 +2,16 @@ const images = document.querySelectorAll(".image");
 const pre_btn = document.querySelectorAll(".pre-btn");
 const play_btn = document.querySelectorAll(".play-btn");
 const next_btn = document.querySelectorAll(".next-btn");
+let audio = document.querySelectorAll(".audios");
 let trackName = document.getElementById("trackName");
 let trackArtist = document.getElementById("trackArtist");
 let pic = document.getElementById("image");
-let slideRange= document.querySelectorAll(".slideRange")
-//create a new audio element
+let presentTime = document.getElementById("current-time");
+let totalDuration = document.getElementById("totalDuration");
+let slideRange= document.getElementById("slideRange")
 let new_track = document.createElement("audio");
-
+let loop = document.getElementById("loop");
+let current_timer;
 let trackIndex = 0;
 let track_list = [
     {
@@ -74,22 +77,38 @@ let track_list = [
 ];
 
 function loadTrack(trackIndex){
+
+    clearInterval(current_timer);
+    resetValues();
+
     //new audios
     new_track.src = track_list[trackIndex].path;
-    new_track.load();
-
+    new_track.load();  
    //set the track details
-    trackName.innerText = track_list[trackIndex].name;  
+    trackName.innerText = track_list[trackIndex].name;
+    //console.log(trackName);
     trackArtist.textContent = track_list[trackIndex].artist;
-    pic.style.backgroundImage = "url(" + track_list[trackIndex].image+ ") "; 
+   // console.log(trackArtist);
+    pic.style.backgroundImage = "url(" + track_list[trackIndex].image+ ") ";
+   // console.log(pic);
+
+    current_timer = setInterval(slideUpdate,1000);
+
     new_track.addEventListener("ended",nextTrack);
 }
-
+let music = document.getElementById("music");
 let isPlaying = false;
+let isLoop = false;
+function switchLoop(){
+    if(!isLoop){
+       new_track.setAttribute("loop","loop") 
+       loop.innerHTML = ('<i class="bi bi-repeat-1"></i>');
+    }
+}
 
 function switchTrack(){
         if(!isPlaying){
-            return playBtn();
+             playBtn(); 
         }else{
             pauseBtn();
         }
@@ -107,7 +126,14 @@ function iconChange(x){
     x.classList.toggle("fa-circle-pause");
 }
 
+function resetValues(){
+    presentTime.textContent = "00:00";
+    totalDuration.textContent = "00:00";
+    slideRange.value = 0;
+}
 function previousTrack(){
+    new_track.removeAttribute("loop","loop");
+    loop.innerHTML = ('<i class="bi bi-repeat"></i>');
     if(trackIndex > 0){
         trackIndex -= 1;
     }else{
@@ -119,6 +145,8 @@ function previousTrack(){
 }
 
 function nextTrack(){
+    new_track.removeAttribute("loop","loop");
+    loop.innerHTML = ('<i class="bi bi-repeat"></i>');
     if(trackIndex < track_list.length - 1){
         trackIndex += 1;
     }else{
@@ -127,4 +155,31 @@ function nextTrack(){
     loadTrack(trackIndex);
     playBtn();
 }
+let slides;
+function slideChange(){
+    slides = new_track.duration * (slideRange.value / 100);
+    new_track.currentTime = slides;
+}
+function slideUpdate(){
+    let slidePosition = 0;
+
+    if(!isNaN(new_track.duration)){
+        slidePosition = (new_track.currentTime * (100 / new_track.duration)).toFixed(2);
+        slideRange.value = slidePosition;
+
+    let currentMinutes = Math.floor(new_track.currentTime / 60);
+    let currentSeconds = Math.floor(new_track.currentTime - currentMinutes * 60);
+    let durationMinutes = Math.floor(new_track.duration / 60);
+    let durationSeconds = Math.floor(new_track.duration - durationMinutes * 60);
+
+    currentMinutes =  currentMinutes < 10 ? "0" + currentMinutes : currentMinutes;
+    currentSeconds = currentSeconds < 10 ? "0" + currentSeconds : currentSeconds;
+    durationMinutes = durationMinutes < 10 ? "0" + durationMinutes : durationMinutes;
+    durationSeconds = durationSeconds < 10 ? "0" + durationSeconds : durationSeconds;
+    
+    presentTime.textContent = currentMinutes + ":" + currentSeconds;
+    totalDuration.textContent = durationMinutes + ":" + durationSeconds;
+}
+}
+
 loadTrack(trackIndex);
