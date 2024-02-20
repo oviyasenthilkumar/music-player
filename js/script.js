@@ -2,15 +2,13 @@ const images = document.querySelectorAll(".image");
 const pre_btn = document.querySelectorAll(".pre-btn");
 const play_btn = document.querySelectorAll(".play-btn");
 const next_btn = document.querySelectorAll(".next-btn");
-let audio = document.querySelectorAll(".audios");
 let trackName = document.getElementById("trackName");
 let trackArtist = document.getElementById("trackArtist");
 let pic = document.getElementById("image");
-let presentTime = document.querySelectorAll(".current-time");
-let totalDuration = document.querySelectorAll(".totalDuration");
 let slideRange= document.querySelectorAll(".slideRange")
+//create a new audio element
 let new_track = document.createElement("audio");
-let current_timer;
+
 let trackIndex = 0;
 let track_list = [
     {
@@ -76,33 +74,22 @@ let track_list = [
 ];
 
 function loadTrack(trackIndex){
-
-    clearInterval(current_timer);
-    resetValues();
-
     //new audios
     new_track.src = track_list[trackIndex].path;
     new_track.load();
 
    //set the track details
-    trackName.innerText = track_list[trackIndex].name;
-    console.log(trackName);
+    trackName.innerText = track_list[trackIndex].name;  
     trackArtist.textContent = track_list[trackIndex].artist;
-    console.log(trackArtist);
-    pic.style.backgroundImage = "url(" + track_list[trackIndex].image+ ") ";
-    console.log(pic);
-
-   // current_timer = setInterval(slideUpdate,1000);
-
+    pic.style.backgroundImage = "url(" + track_list[trackIndex].image+ ") "; 
     new_track.addEventListener("ended",nextTrack);
 }
-let music = document.getElementById("music");
+
 let isPlaying = false;
 
 function switchTrack(){
         if(!isPlaying){
             return playBtn();
-            iconChange(x);
         }else{
             pauseBtn();
         }
@@ -120,11 +107,6 @@ function iconChange(x){
     x.classList.toggle("fa-circle-pause");
 }
 
-function resetValues(){
-    presentTime.textContent = "00:00";
-    totalDuration.textContent = "00:00";
-    slideRange.value = 0;
-}
 function previousTrack(){
     if(trackIndex > 0){
         trackIndex -= 1;
