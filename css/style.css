@@ -4,11 +4,15 @@
     box-sizing: border-box;
 }
 #container{
-    width:80%;
+    width:50%;
     margin: auto;
     height: 100vh;
     background-image: url(../img/bg.jpeg);
     background-size: cover;
+    border: 4px solid #000;
+    border-radius: 15px;
+    box-shadow: 0 0 15px;
+
 }
 #container h1{
     color:#fff;
@@ -20,14 +24,6 @@
 img{
     width:250px;
 }
-.image1 , .image2, .image3, .image4{
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    padding-top: 1rem;
-    width: 100%;
-    height: auto;
-}
 .btns, .slider{
     display: flex;
     justify-content: space-around;
@@ -38,32 +34,26 @@ img{
     cursor: pointer;
 }
 .pre-btn, .play-btn, .next-btn{
-    color: #cc9124;
+    color: #dbb5a4;
     font-size: 10px;
-    margin: 1rem;
 }
 .fa-circle-play, .fa-backward, .fa-forward{
     font-size: 2rem;
 }
-.slideRange{
+#slideRange{
     width: 70%;
-    height:3px;
     font-size: 3rem;
-    height: 5px;
-    background: black;
-    opacity: 0.7;
-    transition: opacity 0.5s;
-    margin: 0 15px;
-    appearance: none;
+    background: rgb(17, 16, 16);
+    margin: 0 5px;
 }
 #image{
-        margin: 1rem 0 0 29rem;
+        margin: 1rem 0 0 15rem;
         height: 21rem;
         width: 17rem;
         background-size: cover;
         border-radius: 15%;
 }
-.current-time, .totalDuration{
+#current-time, #totalDuration{
     color:#fff;
     font-size: 1rem;
 }
@@ -80,3 +70,17 @@ button{
     color:none;
     border:none;
 }
+.loopBtn{
+    color: #cc9124;
+    font-size: 1rem;
+}
+#loop{
+    font-size: 1.5rem;
+    color: #dbb5a4;
+}
+input[type="range"] {
+    border: none;
+    outline: none;
+    height:3px;
+    accent-color: #dbb5a4;
+  }
